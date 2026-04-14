@@ -1,0 +1,15 @@
+[project]
+name = "sharjeel-web-automation"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "openpyxl>=3.1.5",
+    "playwright>=1.58.0",
+    "requests>=2.33.1",
+    "PySide6>=6.6.0",
+]
+
+[project.scripts]
+sharjeel-app = "app:main"

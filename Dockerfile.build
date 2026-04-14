@@ -1,0 +1,44 @@
+FROM mymi14s/ubuntu-wine:24.04-3.11
+
+# Qt system dependencies (Ubuntu 24.04 package names)
+RUN dpkg --add-architecture i386 && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libgl1:i386 \
+        libglib2.0-0:i386 \
+        libpango-1.0-0:i386 \
+        libcairo2:i386 \
+        libatk1.0-0:i386 \
+        libatk-bridge2.0-0:i386 \
+        libcups2:i386 \
+        libxcomposite1:i386 \
+        libxdamage1:i386 \
+        libxfixes3:i386 \
+        libxrandr2:i386 \
+        libgbm1:i386 \
+        libasound2:i386 \
+        libpulse0:i386 \
+        libxshmfence1:i386
+
+# Wine setup
+RUN wineboot --update 2>/dev/null || true
+
+WORKDIR /build
+
+# Copy and install Python dependencies
+COPY requirements.txt .
+RUN wine cmd /c "C:\\Python311\\python.exe -m pip install -r C:\\build\\requirements.txt"
+
+# Install Playwright browsers (bundled in app)
+ENV PLAYWRIGHT_BROWSERS_PATH=0
+RUN wine cmd /c "C:\\Python311\\python.exe -m playwright install chromium"
+
+# Copy source code
+COPY app.py .
+COPY automation.py .
+
+# Build executable
+RUN wine cmd /c "C:\\Python311\\python.exe -m PyInstaller --onefile --windowed --name SharjeelAutomation app.py"
+
+# Copy output
+RUN cp dist/SharjeelAutomation.exe /output/
