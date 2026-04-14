@@ -4,7 +4,7 @@ import openpyxl
 import requests
 from playwright.sync_api import Playwright, sync_playwright
 from time import sleep
-from PySide6.QtCore import Signal, QObject
+from PySide6.QtCore import Signal, QThread
 
 STATE_FILE = "state.json"
 
