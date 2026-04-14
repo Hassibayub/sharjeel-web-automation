@@ -20,11 +20,11 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install pyinstaller
+          playwright install chromium
       
       - name: Build EXE with PyInstaller
         run: |
-          pyinstaller --onefile --noconfirm --name SharjeelWebAutomation app.py
+          pyinstaller --onefile --noconfirm --name SharjeelWebAutomation --collect-all PySide6 --collect-all playwright --collect-all openpyxl --collect-all requests app.py
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
